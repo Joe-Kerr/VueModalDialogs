@@ -15,6 +15,7 @@ The Vue version of JavaScript's alert(), confirm() and propmt() dialogs.
 
 - Vue
 - Vuex
+- dev environment such as Vue Cli ("soft" requirement / recommended)
 
 
 ## Install
@@ -24,38 +25,52 @@ The Vue version of JavaScript's alert(), confirm() and propmt() dialogs.
 npm install @joe_kerr/vue-modal-dialogs
 ```
 
-**2)**
+**2a) dev environment**
 
 ```
-import modalDialogs from "./where_you_put_it/src/index.js"; //Requires a dev environment.
+import {installer, component} from "@joe_kerr/vue-modal-dialogs"; 
+```
+
+or
+
+```javascript
+import * as modalDialogs_or_whatever from "@joe_kerr/vue-modal-dialogs"; 
+```
+
+**2b) Pure node or browser**
+
+```javascript
+const modalDialogs = require("path_to_node_modules/@joe_kerr/vue-modal-dialogs/dist/modalDialogs.common.min.js");
 ```
 
 or
 
 ```
-const modalDialogs = require("./where_you_put_it/dist/modalDialogs.common.min.js");
+<html> <script src="path_to_node_modules/@joe_kerr/vue-modal-dialogs/dist/modalDialogs.umd.min.js"></script>
 ```
 
-or
+and 
 
-```
-<html> <script src=""./where_you_put_it/dist/modalDialogs.umd.min.js""></script>
-```
+<link rel="stylesheet" href="path_to_node_modules/@joe_kerr/vue-modal-dialogs/dist/modalDialogs.css">
+
+
 
 **3)**
 
+```javascript
+Vue.use(modalDialogs.installer, configuration); 
 ```
-Vue.use(modalDialogs, configuration); //import default
-//or!!
-Vue.use(modalDialogs.installer, configuration); //named import
-```
+
+***4)**
+
+Include the modal dialog container somewhere in your template: ```<modal-dialog-container />```
 
 
 ## Use
 
 ### Configuration
 
-Provide configuration properties on the second parameter of the Vue.use(plugin, config) call.
+Provide configuration properties on the second parameter of the Vue.use(plugin, **configProperties**) call.
 
 #### vuex (mandatory)
 
@@ -121,7 +136,10 @@ div.modal-dialog_modal {/*overrides*/}
 
 ## Versions
 
-### 1.0.0 
+### 1.0.1
+- Changed: module import facilitated.
+
+### 1.0.0
 - Public release.
 
 
