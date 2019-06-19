@@ -1,0 +1,50 @@
+.modal-dialog_modal {
+	background-color: rgba(255,255,255, 0.6);
+}
+
+.modal-dialog_container {
+	background-color: white; 
+	border: 1px solid grey; 
+	border-radius: 5px;
+	padding: 5px;
+	-webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+	-moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+	box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+}
+
+.modal-dialog_header {
+	background: #cccccc;
+	background: -moz-linear-gradient(top,  #cccccc 0%, #aaaaaa 100%);
+	background: -webkit-linear-gradient(top,  #cccccc 0%,#aaaaaa 100%);
+	background: linear-gradient(to bottom,  #cccccc 0%,#aaaaaa 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cccccc', endColorstr='#aaaaaa',GradientType=0 );
+	
+	color: black;	
+
+	border-radius: 5px;
+	height: 20px;
+	font-weight: bold;
+	padding-left: 5px;
+	padding-top: 5px;
+}
+
+.modal-dialog_body {
+	word-wrap: break-word;
+}
+
+.modal-dialog_footer {
+	text-align: right;
+}
+
+.modal-dialog_textarea {
+	width: 290px; 
+	height: 70px; 
+}
+
+.open-enter-active, .open-leave-active {
+	transition: opacity .5s;
+}
+
+.open-enter, .open-leave-to {
+	opacity: 0;
+}

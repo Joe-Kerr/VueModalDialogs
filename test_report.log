@@ -1,0 +1,45 @@
+ MOCHA  Testing...
+
+
+
+  Default namespace
+    √ ui/dialogContainer.js: modalDialog
+    √ index.js/installer: modalDialog
+
+  modalDialogs/ui/dialogContainer.js
+    √ computed.activeModal returns correct component or null
+    √ computed.activeModal throws if invalid store state
+    √ computed.parameters returns store state
+    √ methods.close dispatches to store with parameter
+    √ created overrides namespace if on $options
+
+  modalDialogs/ui/*particular dialogs
+    √ dialogConfirm.methods.ok calls close with true
+    √ dialogConfirm.methods.cancel calls close with false
+    √ dialogPrompt.methods.ok calls close with value of input
+    √ dialogPrompt.methods.cancel calls close with null
+    √ dialogPrompt.created() sets optional parameters
+
+  modalDialogs/index.js
+    √ index.js provides expected exports
+    √ installer calls all utility functions
+    √ installer writes namespace to component
+
+  Integration tests
+    √ Install -> 'open dialog' chain working (98ms)
+    √ actions.close resolves promise returned by actions.open with return value
+
+  modalDialog/ui/modalDialogBase.js
+    √ Component uses title-, body- and buttons-props
+    √ Component uses header-, body- and buttons-slots
+
+  modalDialogs/store/index.js
+    √ mutations.set uses correct function
+    √ actions.open sets 'opened' and optionally 'parameters' (default: null)
+    √ actions.open throws if another dialog has not been resolved yet
+    √ actions.close resets state
+
+
+  23 passing (158ms)
+
+ MOCHA  Tests completed successfully

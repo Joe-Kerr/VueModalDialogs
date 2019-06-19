@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>		
+		<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/vuex/3.1.1/vuex.min.js"></script>
+		
+		<script src="../dist/modalDialogs.umd.min.js"></script>
+		<link rel="stylesheet" href="../dist/modalDialogs.css">
+		<link rel="stylesheet" href="./demo.css">
+
+	</head>
+
+<body>
+
+<div id="v"></div>
+
+<script>
+(function() {
+	
+	const store = new Vuex.Store({});
+
+	Vue.use(modalDialogs.installer, {vuex: store});	  
+
+	window.v = new Vue({
+		el: "#v",
+		store,
+		components: {"modal-dialog-container": modalDialogs.component },
+		template: `
+		<div>
+			<transition name="open">
+				<modal-dialog-container />
+			</transition>
+			
+			<button v-on:click="demo">Show Vue dialogs</button>
+			<button v-on:click="demo2">Show native dialogs</button>
+		
+		</div>
+		`,
+		methods: {
+			async demo() {				
+				let res;
+				res = await this.$store.dispatch("modalDialog/open", {dialog: "prompt", parameters: {text: "Enter some text", placeholder: "...in here."}});
+				if(res === null || res.trim() === "") {res = "But I did not enter any text :/"};
+				
+				res = await this.$store.dispatch("modalDialog/open", {dialog: "confirm", parameters: "Is this the text you have justed entered: '"+res+"'"});
+				
+				this.$store.dispatch("modalDialog/open", {dialog: "alert", parameters: "You have just answered: "+res});
+			},
+			
+			demo2() {
+				let res; 
+				res = prompt();
+				if(res === null || res.trim() === "") {res = "But I did not enter any text :/"};
+				
+				res = confirm("Is this the text you have justed entered: '"+res+"'");
+				
+				alert("You have just answered: "+res);
+			}
+		}
+	
+	});
+})()
+</script>
+
+</body>
+</html>
