@@ -1,6 +1,6 @@
 {
   "name": "@joe_kerr/vue-modal-dialogs",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "JavaScript's alert(), confirm() and propmt() as Vue components.",
   "main": "./src/index.js",
   "module": "./src/index.js",

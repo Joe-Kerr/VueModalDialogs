@@ -26,7 +26,7 @@
     √ installer writes namespace to component
 
   Integration tests
-    √ Install -> 'open dialog' chain working (99ms)
+    √ Install -> 'open dialog' chain working (98ms)
     √ actions.close resolves promise returned by actions.open with return value
 
   modalDialog/ui/modalDialogBase.js
@@ -40,6 +40,6 @@
     √ actions.close resets state
 
 
-  23 passing (278ms)
+  23 passing (272ms)
 
  MOCHA  Tests completed successfully

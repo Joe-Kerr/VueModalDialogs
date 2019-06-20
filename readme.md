@@ -11,6 +11,11 @@ The Vue version of JavaScript's alert(), confirm() and propmt() dialogs.
 - When await'ed behave like **native** counter parts (i.e. blocking).
 
 
+## Demo
+
+[See it in action.](https://joe-kerr.github.io/VueModalDialogs/)
+
+
 ## Requirements
 
 - Vue
@@ -145,6 +150,9 @@ div.modal-dialog_modal {/*overrides*/}
 
 
 ## Versions
+
+### 1.0.3
+- Added: live demo with github pages
 
 ### 1.0.2
 - Fixed: ohh, I see now: https://github.com/webpack/webpack/issues/7646
