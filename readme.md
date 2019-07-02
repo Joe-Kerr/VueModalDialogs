@@ -153,6 +153,7 @@ div.modal-dialog_modal {/*overrides*/}
 
 ### 1.0.4
 - Fixed: gitignore not in the file list of the build script
+- Changed: made live demo a bit prettier
 
 ### 1.0.3
 - Added: live demo with github pages

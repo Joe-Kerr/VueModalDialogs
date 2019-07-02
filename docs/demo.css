@@ -1,5 +1,9 @@
+body {
+	font-family: Arial;
+}
+
 .modal-dialog_modal {
-	background-color: rgba(255,255,255, 0.6);
+	background-color: rgba(0,0,0, 0.5);
 }
 
 .modal-dialog_container {
@@ -20,6 +24,7 @@
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cccccc', endColorstr='#aaaaaa',GradientType=0 );
 	
 	color: black;	
+	text-shadow: 1px 1px #dcdcdc;
 
 	border-radius: 5px;
 	height: 20px;
