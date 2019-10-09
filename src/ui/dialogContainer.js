@@ -44,5 +44,26 @@ export default {
 		}
 	},		
 	
+	install(userDialogs) {
+		const errorPrefix = "Failed to install user dialogs: ";
+		if(!(userDialogs instanceof Array)) {
+			throw new Error(errorPrefix+"dialogs parameter not an Array");
+		}
+		
+		for(let i=0, ii=userDialogs.length; i<ii; i++) {
+			const dialog = userDialogs[i];
+			
+			if(!("name" in dialog)) {
+				throw new Error(errorPrefix+"missing name property on user dialog. Make sure you provide a dialog compnent.");
+			}
+			
+			if(dialog.name in this.components) {
+				throw new Error(errorPrefix+"duplicate component name detected: "+dialog.name);
+			}
+			
+			this.components[dialog.name] = dialog;
+		}
+	},
+	
 	components: {"modal-dialog-confirm": dialogConfirm, "modal-dialog-prompt": dialogPrompt, "modal-dialog-alert": dialogAlert}
 }

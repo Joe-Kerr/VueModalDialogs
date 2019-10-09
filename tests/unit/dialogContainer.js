@@ -58,3 +58,41 @@ test("created overrides namespace if on $options", ()=>{
 	sample.created.call(context);	
 	assert.equal(context.namespace, "456");
 });
+
+test("install writes user dialogs to components", ()=>{
+	const context = {components: {}};
+	const dialogs = [{name: "dialog1"}, {name: "dialog2"}];
+	
+	sample.install.call(context, dialogs);
+	assert.deepEqual(context.components.dialog1, dialogs[0]);
+	assert.deepEqual(context.components.dialog2, dialogs[1]);
+	assert.equal(Object.keys(context.components).length, 2);
+});
+
+test("install preserves existing components", ()=>{
+	const context = {components: { existing: {name: "existing"} }};
+	const dialogs = [{name: "dialog1"}];	
+	
+	sample.install.call(context, dialogs);
+	assert.deepEqual(context.components.dialog1, dialogs[0]);
+	assert.deepEqual(context.components.existing, {name: "existing"});
+	assert.equal(Object.keys(context.components).length, 2);	
+});
+
+test("install throws if duplicate name of a user dialog", ()=>{
+	const context = {components: { existing: {name: "existing"} }};
+	const dialogs = [{name: "existing"}];	
+	
+	assert.throws(()=>{ sample.install.call(context, dialogs); }, {message: /duplicate component name /});	
+});
+
+test("install throws if user dialogs not an array", ()=>{
+	assert.throws(()=>{ sample.install(); }, {message: /not an Array/});
+	assert.throws(()=>{ sample.install({name: "fail"}); }, {message: /not an Array/});
+	assert.throws(()=>{ sample.install("fail"); }, {message: /not an Array/});
+	assert.throws(()=>{ sample.install(()=>[{name:"fail"}]); }, {message: /not an Array/});
+});
+
+test("install throws if user dialogs miss name property", ()=>{
+	assert.throws(()=>{ sample.install([{anythingButName: "fail"}]) }, {message: /missing name property/});
+});

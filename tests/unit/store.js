@@ -48,3 +48,8 @@ test("actions.close resets state", async ()=>{
 	assert.equal(calls[0].data.val, null);
 	assert.equal(calls[1].data.val, null);	
 });
+
+
+test("actions.installUserDialogs writes user dialog infos to dialog map");
+
+test("actions.installUserDialogs throws if duplicate dialog name");
