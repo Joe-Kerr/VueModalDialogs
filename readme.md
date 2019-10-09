@@ -68,9 +68,11 @@ Vue.use(modalDialogs.installer, configuration);
 
 ***4)**
 
-Include the modal dialog container somewhere in your template: ```<modal-dialog-container />```
-
-And in your script:
+```html
+<section id="main">
+	<modal-dialog-container />
+</section>
+```
 
 ```javascript
 import {component} from "@joe_kerr/vue-modal-dialogs";
@@ -78,8 +80,12 @@ import {component} from "@joe_kerr/vue-modal-dialogs";
 const {component} = require("path_to_node_modules/@joe_kerr/vue-context-menu/dist/modalDialogs.common.js");
 //or
 const component = contextMenu.component;
-```
 
+export default {
+	name: "main",
+	components: {"modal-dialog-container": component}
+};
+```
 
 ## Use
 
