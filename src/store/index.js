@@ -11,29 +11,22 @@ const store = {
 	},
 	
 	mutations: {			
-		set: mutations.setPropVal
+		set: mutations.setProps
 	},	
 	
 	actions: {
-		set(store, data) {
-			store.commit("set", data);
-		},
-		
 		open(store, data) {
 			if(store.state.opened !== null) {
 				throw new Error("Tried to open a dialog but another dialog is still opened.");
 			}
-			
-			store.commit("set", {prop: "parameters", val: data.parameters || null});
-			store.commit("set", {prop: "opened", val: data.dialog});
+			store.commit("set", {parameters: data.parameters || null, opened: data.dialog});
 			return new Promise((resolve) => {
 				dialogResolve = resolve;
 			})
 		},
 		
 		close(store, data) {
-			store.commit("set", {prop: "parameters", val: null});
-			store.commit("set", {prop: "opened", val: null});
+			store.commit("set", {parameters: null, opened: null});
 			dialogResolve(data);
 			dialogResolve = null;
 		}

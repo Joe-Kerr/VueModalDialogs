@@ -3,30 +3,43 @@ const sample = require("../../src/store/index.js").default;
 
 suite("modalDialogs/store/index.js");
 
+let originalState;
+const commit = (cmd, data)=>{ sample.mutations[cmd](sample.state, data); };
+const store = {state: sample.state, commit}
+
+function resetState() {sample.state = JSON.parse(JSON.stringify(originalState));}
+
+before(()=>{
+	originalState = JSON.parse(JSON.stringify(sample.state));
+});
+
+after(()=>{
+	resetState();
+	originalState = null;
+});
+
+afterEach(()=>{
+	resetState();
+});
+
 test("mutations.set uses correct function", ()=>{
-	assert.equal(sample.mutations.set.name, "setPropVal");
+	assert.equal(sample.mutations.set.name, "setProps");
 });
 
 
 test("actions.open sets 'opened' and optionally 'parameters' (default: null)", async ()=>{
-	let calls = [];
-	const state = {opened: null};
-	const commit = (name, data) => {calls.push({name,data});};
+	sample.actions.open(store, {dialog: "test"});	
+	assert.equal(sample.state.opened, "test");
+	assert.equal(sample.state.parameters, null);
 	
-	const resolve = (call)=>{
-		sample.actions.close({commit: ()=>{}})
-		return call;
-	};
+	sample.actions.close(store);
+	resetState();
+
+	sample.actions.open(store, {dialog: "test", parameters: 123});	
+	assert.equal(sample.state.opened, "test");
+	assert.equal(sample.state.parameters, 123);
 	
-	await resolve(sample.actions.open({commit, state}, {dialog: "test", parameters: 123}));	
-	assert.equal(calls.length, 2);
-	assert.equal(calls[0].data.val, 123);
-	assert.equal(calls[1].data.val, "test");
-
-	calls = [];
-	await resolve(sample.actions.open({commit, state}, {dialog: "test"}));
-	assert.equal(calls[0].data.val, null);
-
+	sample.actions.close(store);
 });
 
 test("actions.open throws if another dialog has not been resolved yet", async ()=>{
@@ -37,14 +50,11 @@ test("actions.open throws if another dialog has not been resolved yet", async ()
 
 
 test("actions.close resets state", async ()=>{
-	const calls = [];
-	const state = {opened: null};
-	const commit = (name, data) => {calls.push({name,data});};	
+	sample.actions.open(store, {dialog: "test", parameters: 123});	
+	assert.notEqual(sample.state.opened, null);
+	assert.notEqual(sample.state.parameters, null);
 	
-	sample.actions.open({state, commit: ()=>{}}, {dialog: "test", parameters: 123});
-	sample.actions.close({commit});
-	
-	assert.equal(calls.length, 2);
-	assert.equal(calls[0].data.val, null);
-	assert.equal(calls[1].data.val, null);	
+	sample.actions.close(store);	
+	assert.equal(sample.state.opened, null);
+	assert.equal(sample.state.parameters, null);	
 });
