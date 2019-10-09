@@ -1,6 +1,6 @@
 {
   "name": "@joe_kerr/vue-modal-dialogs",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "JavaScript's alert(), confirm() and propmt() as Vue components.",
   "main": "./src/index.js",
   "module": "./src/index.js",
@@ -24,7 +24,7 @@
     "dev:build": "vue-cli-service build --target lib --name modalDialogs --entry ./src/index.js --dest ./dist"
   },
   "dependencies": {
-    "cats4vue": "^1.0.0",
-    "vuex-heman": "^1.0.1"
+    "cats4vue": "^1.0.4",
+    "vuex-heman": "^1.5.0"
   }
 }
