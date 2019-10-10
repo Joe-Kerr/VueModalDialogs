@@ -12,6 +12,11 @@
     √ computed.parameters returns store state
     √ methods.close dispatches to store with parameter
     √ created overrides namespace if on $options
+    √ install writes user dialogs to components
+    √ install preserves existing components object
+    √ install writes baes dialog to user dialog components
+    √ install preserves user dialog components object
+    √ install throws if duplicate name of a user dialog
 
   modalDialogs/ui/*particular dialogs
     √ dialogConfirm.methods.ok calls close with true
@@ -24,22 +29,31 @@
     √ index.js provides expected exports
     √ installer calls all utility functions
     √ installer writes namespace to component
+    √ installer calls sub installers
+    √ installer deletes install function from dialog container
+    √ installer throws if user dialogs not an array
+    √ installer throws if any user dialog not provided as {name, dialog}
+    √ installer throws if name is missing from any user dialog component
 
   Integration tests
-    √ Install -> 'open dialog' chain working (98ms)
+    √ Open and resolve a custom dialog (99ms)
+    √ Open a default dialog (39ms)
     √ actions.close resolves promise returned by actions.open with return value
 
   modalDialog/ui/modalDialogBase.js
     √ Component uses title-, body- and buttons-props
-    √ Component uses header-, body- and buttons-slots
+    √ Component uses header-, body- and footer-slots
 
   modalDialogs/store/index.js
     √ mutations.set uses correct function
+    √ mutations.addDialogs writes user dialog infos to dialog map
+    √ mutations.addDialogs throws if duplicate dialog name
     √ actions.open sets 'opened' and optionally 'parameters' (default: null)
     √ actions.open throws if another dialog has not been resolved yet
     √ actions.close resets state
+    √ actions.installUserDialogs calls addDialogs mutation
 
 
-  23 passing (272ms)
+  37 passing (244ms)
 
  MOCHA  Tests completed successfully

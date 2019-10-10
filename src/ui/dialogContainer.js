@@ -6,12 +6,9 @@ export default {
 	name: "modal-dialog-container",
 	computed: {
 		activeModal() {			
-			const map = {
-				confirm: "modal-dialog-confirm",
-				alert: "modal-dialog-alert",
-				prompt: "modal-dialog-prompt"
-			};
-			const active = this.$store.state[this.namespace].opened;
+			const state = this.$store.state[this.namespace];
+			const map = state.dialogComponentMap;
+			const active = state.opened;
 			const modal = (active === null) ? null : map[active];
 			
 			if(typeof modal === "undefined") {
@@ -43,6 +40,20 @@ export default {
 			this.namespace = this.$options.$_modalDialogs_namespace;
 		}
 	},		
+	
+	install(userDialogs, baseDialog) {
+		for(let i=0, ii=userDialogs.length; i<ii; i++) {
+			const dialog = userDialogs[i];
+						
+			if(dialog.name in this.components) {
+				throw new Error("Failed to install user dialogs: duplicate component name detected: "+dialog.name);
+			}
+			
+			dialog.components = dialog.components || {};
+			dialog.components[baseDialog.name] = baseDialog;
+			this.components[dialog.name] = dialog;
+		}
+	},
 	
 	components: {"modal-dialog-confirm": dialogConfirm, "modal-dialog-prompt": dialogPrompt, "modal-dialog-alert": dialogAlert}
 }

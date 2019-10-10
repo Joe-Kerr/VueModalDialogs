@@ -7,11 +7,28 @@ const store = {
 	
 	state: {
 		opened: null,
-		parameters: null
+		parameters: null,
+		dialogComponentMap: {
+			confirm: "modal-dialog-confirm",
+			alert: "modal-dialog-alert",
+			prompt: "modal-dialog-prompt"			
+		}
 	},
 	
 	mutations: {			
-		set: mutations.setProps
+		set: mutations.setProps,
+		
+		addDialogs(state, dialogs) {
+			for(let i=0, ii=dialogs.length; i<ii; i++) {
+				const dialog = dialogs[i];
+				
+				if(dialog.name in state.dialogComponentMap) {
+					throw new Error("Failed to install dialog to store: duplicate name detected: "+dialog.name);
+				}
+				
+				state.dialogComponentMap[dialog.name] = dialog.component;
+			}			
+		}
 	},	
 	
 	actions: {
@@ -29,6 +46,10 @@ const store = {
 			store.commit("set", {parameters: null, opened: null});
 			dialogResolve(data);
 			dialogResolve = null;
+		},
+		
+		installUserDialogs(store, dialogs) {
+			store.commit("addDialogs", dialogs);
 		}
 	}
 };

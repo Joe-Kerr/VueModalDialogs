@@ -1,4 +1,5 @@
 const assert = require("assert");
+const sinon = require("sinon");
 const sample = require("../../src/store/index.js").default;
 
 suite("modalDialogs/store/index.js");
@@ -27,6 +28,19 @@ test("mutations.set uses correct function", ()=>{
 });
 
 
+test("mutations.addDialogs writes user dialog infos to dialog map", ()=>{
+	sample.mutations.addDialogs(sample.state, [{name: "test1", component: "test1-dialog"}, {name: "test2", component: "test2-dialog"}]);
+	
+	assert.equal(Object.keys(sample.state.dialogComponentMap).length, 5);
+	assert.equal(sample.state.dialogComponentMap.test1, "test1-dialog");
+	assert.equal(sample.state.dialogComponentMap.test2, "test2-dialog");
+});
+
+test("mutations.addDialogs throws if duplicate dialog name", ()=>{
+	assert.throws(()=>{ sample.mutations.addDialogs(sample.state, [{name: "alert", component: "test1-dialog"}]); }, {message: /duplicate name/});
+});
+
+
 test("actions.open sets 'opened' and optionally 'parameters' (default: null)", async ()=>{
 	sample.actions.open(store, {dialog: "test"});	
 	assert.equal(sample.state.opened, "test");
@@ -43,8 +57,7 @@ test("actions.open sets 'opened' and optionally 'parameters' (default: null)", a
 });
 
 test("actions.open throws if another dialog has not been resolved yet", async ()=>{
-	const state = {opened: "notNull"};
-	
+	const state = {opened: "notNull"};	
 	assert.throws(()=>{ sample.actions.open({state}); }, {message: /another dialog/});
 });
 
@@ -58,3 +71,15 @@ test("actions.close resets state", async ()=>{
 	assert.equal(sample.state.opened, null);
 	assert.equal(sample.state.parameters, null);	
 });
+
+
+test("actions.installUserDialogs calls addDialogs mutation", ()=>{
+	const commit = new sinon.fake();
+	const data = [{d:"t"}];
+	
+	sample.actions.installUserDialogs({commit}, data);
+	assert.equal(commit.callCount, 1);
+	assert.equal(commit.lastCall.args[0], "addDialogs");
+	assert.equal(commit.lastCall.args[1], data);
+});
+

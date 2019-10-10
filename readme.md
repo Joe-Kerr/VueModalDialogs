@@ -9,6 +9,7 @@ The Vue version of JavaScript's alert(), confirm() and propmt() dialogs.
 - Prompt dialog displaying a text area and an "Ok"- and a "Cancel"-button.
 - Dialogs return respective value of the user action (true, false, text).
 - When await'ed behave like **native** counter parts (i.e. blocking).
+- New: custom dialogs
 
 
 ## Demo
@@ -20,7 +21,6 @@ The Vue version of JavaScript's alert(), confirm() and propmt() dialogs.
 
 - Vue
 - Vuex
-- dev environment such as Vue Cli ("soft" requirement / recommended)
 
 
 ## Install
@@ -102,10 +102,16 @@ A reference to your Vuex store instance.
 
 The namespace of the store module, i.e. what you put in the dispatch call: store.dispatch("**namspace**/open"). Default: "modalDialog"
 
+#### customDialogs
+
+An array of custom dialogs in form of {name, dialog} where
+- name: identifier name of the dialog used in the open action, i.e.: store.dispatch("namespace/open", {dialog: **name**})
+- dialog: the dialog component
+
 
 ### Open dialogs
 
-The available dialogs correspond to the native JavaScript counter parts:
+The default dialogs correspond to the native JavaScript counter parts:
 - alert
 - confirm
 - propmt
@@ -127,6 +133,51 @@ The "response" promise resolves after a button on the dialog was pressed. It wil
 - true or false for the confirm dialog,
 - the text content of the prompt dialog if ok'ed or null if cancled.
 
+### Create new dialogs
+```javascript
+// ./src/dialogs/customDialog.vue
+export default {
+  name: "custom-dialog",
+  props: ["parameters", "close"],
+  //<base-modal-dialog> is available on all custom dialogs
+  template: `
+  <base-modal-dialog title="Custom dialog" :buttons="{'DoSth', doSth}">
+    <div slot="header">custon header</div>
+    <div slot="body">custon body</div>
+    <div slot="footer">custon footer</div>
+  </<base-modal-dialog>
+  `,
+  methods: {
+    doSth() {
+      console.log("msg from doSth:", this.parameters.info);
+      this.close("any data"); //This will resolve the dialog promise that was returned when the dialog was opened.
+    }
+  }
+};
+```
+
+```javascript
+// Vue setup
+import {installer, component} from "@joe_kerr/vue-modal-dialogs"; 
+import customDialogComp from "./src/dialogs/customDialog.vue";
+
+const vuex = new Vuex.Store();
+const customDialog = {
+  name: "customDialog",
+  dialog: customDialogComp
+};
+
+Vue.use(installer, {vuex, customDialogs: [customDialog]})
+```
+
+```javascript
+// ./src/someVueComponent.vue
+{
+  const promise = this.$store.dispatch("modalDialogs/open", {dialog: "customDialog", parameters: {info: "hello world"}});
+  // The promise will be resolved by calling the props.close callback in the custom dialog.
+}
+```
+
 
 ### Style dialogs
 
@@ -137,10 +188,12 @@ The plugin comes with the following classes you can just override.
 - .modal-dialog_header
 - .modal-dialog_body
 - .modal-dialog_footer
+- .modal-dialog_buttons
 - .modal-dialog_alert
 - .modal-dialog_confirm
 - .modal-dialog_prompt
 - .modal-dialog_textarea
+- #modal-dialog_buttons--{{name_of_button}}
 
 Default styles are provided that center the dialogs mid screen. If you want to change these as well, do it like so: 
 
@@ -156,6 +209,12 @@ div.modal-dialog_modal {/*overrides*/}
 
 
 ## Versions
+
+### 1.1.0
+- Added: custom dialogs can be installed
+
+### 1.0.5
+- Minor changes.
 
 ### 1.0.4
 - Fixed: gitignore not in the file list of the build script
@@ -177,4 +236,3 @@ div.modal-dialog_modal {/*overrides*/}
 ## Copyright
 
 MIT (c) Joe Kerr 2019
-
