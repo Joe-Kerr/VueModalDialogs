@@ -4,11 +4,16 @@ const sample = require("../../src/ui/dialogContainer.js").default;
 suite("modalDialogs/ui/dialogContainer.js");
 
 test("computed.activeModal returns correct component or null", ()=>{
+	const dialogComponentMap = {
+				confirm: "modal-dialog-confirm",
+				alert: "modal-dialog-alert",
+				prompt: "modal-dialog-prompt"			
+	};	
 	const context = {
-		$store: {state: {NS: {opened: null}}},
+		$store: {state: {NS: {opened: null, dialogComponentMap}}},
 		namespace: "NS"
 	};
-	const possible = ["confirm", "alert", "prompt"];
+	const possible = Object.keys(dialogComponentMap);//["confirm", "alert", "prompt"];
 	
 	assert.equal(sample.computed.activeModal.call(context), null);
 	
@@ -22,7 +27,7 @@ test("computed.activeModal returns correct component or null", ()=>{
 
 test("computed.activeModal throws if invalid store state", ()=>{
 	const context = {
-		$store: {state: {NS: {opened: "bollocks"}}},
+		$store: {state: {NS: {opened: "bollocks", dialogComponentMap: {}}}},
 		namespace: "NS"
 	};	
 	
@@ -62,21 +67,42 @@ test("created overrides namespace if on $options", ()=>{
 test("install writes user dialogs to components", ()=>{
 	const context = {components: {}};
 	const dialogs = [{name: "dialog1"}, {name: "dialog2"}];
+	const baseDialog = {name: "base"};
 	
-	sample.install.call(context, dialogs);
+	sample.install.call(context, dialogs, baseDialog);
 	assert.deepEqual(context.components.dialog1, dialogs[0]);
 	assert.deepEqual(context.components.dialog2, dialogs[1]);
 	assert.equal(Object.keys(context.components).length, 2);
 });
 
-test("install preserves existing components", ()=>{
+test("install preserves existing components object", ()=>{
 	const context = {components: { existing: {name: "existing"} }};
 	const dialogs = [{name: "dialog1"}];	
+	const baseDialog = {name: "base"};
 	
-	sample.install.call(context, dialogs);
+	sample.install.call(context, dialogs, baseDialog);
 	assert.deepEqual(context.components.dialog1, dialogs[0]);
 	assert.deepEqual(context.components.existing, {name: "existing"});
 	assert.equal(Object.keys(context.components).length, 2);	
+});
+
+test("install writes baes dialog to user dialog components", ()=>{
+	const context = {components: {}};
+	const dialogs = [{name: "dialog1"}, {name: "dialog2"}];
+	const baseDialog = {name: "base"};	
+	
+	sample.install.call(context, dialogs, baseDialog);
+	assert.equal(dialogs[0].components.base, baseDialog);
+	assert.equal(dialogs[1].components.base, baseDialog);
+});
+
+test("install preserves user dialog components object", ()=>{
+	const context = {components: {}};
+	const dialogs = [{name: "dialog1", components: {existing: {name: "existing-dialog"}}}];
+	const baseDialog = {name: "base"};
+
+	sample.install.call(context, dialogs, baseDialog);
+	assert.deepEqual(dialogs[0].components, {existing: {name: "existing-dialog"}, base: {name: "base"}});
 });
 
 test("install throws if duplicate name of a user dialog", ()=>{
@@ -84,15 +110,4 @@ test("install throws if duplicate name of a user dialog", ()=>{
 	const dialogs = [{name: "existing"}];	
 	
 	assert.throws(()=>{ sample.install.call(context, dialogs); }, {message: /duplicate component name /});	
-});
-
-test("install throws if user dialogs not an array", ()=>{
-	assert.throws(()=>{ sample.install(); }, {message: /not an Array/});
-	assert.throws(()=>{ sample.install({name: "fail"}); }, {message: /not an Array/});
-	assert.throws(()=>{ sample.install("fail"); }, {message: /not an Array/});
-	assert.throws(()=>{ sample.install(()=>[{name:"fail"}]); }, {message: /not an Array/});
-});
-
-test("install throws if user dialogs miss name property", ()=>{
-	assert.throws(()=>{ sample.install([{anythingButName: "fail"}]) }, {message: /missing name property/});
 });

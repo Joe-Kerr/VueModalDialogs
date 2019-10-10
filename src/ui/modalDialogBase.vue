@@ -16,9 +16,8 @@
 			
 			
 			<div class="modal-dialog_footer">
-				<hr>
-				<slot name="buttons">
-					<button v-for="(btn, name) in buttons" v-on:click="btn">{{name}}</button>
+				<slot name="footer">
+					<button class="modal-dialog_buttons" :id="'modal-dialog_buttons--'+name" v-for="(btn, name) in buttons" v-on:click="btn">{{name}}</button>
 				</slot>
 			</div>
 		</div>

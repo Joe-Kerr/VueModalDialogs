@@ -9,6 +9,7 @@ test("ui/dialogContainer.js: modalDialog", ()=>{
 });
 
 test("index.js/installer: modalDialog", ()=>{
+	const backup = dialogContainer.install;
 	let namespace;
 	const vuex = {dispatch: ()=>{}, registerModule: (ns,store)=>{namespace=ns;}}
 	
@@ -16,4 +17,5 @@ test("index.js/installer: modalDialog", ()=>{
 	assert.equal(namespace, "modalDialog");
 	
 	delete dialogContainer.$_modalDialogs_namespace;
+	dialogContainer.install = backup;
 });

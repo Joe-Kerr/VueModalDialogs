@@ -28,14 +28,14 @@ test("Component uses title-, body- and buttons-props", ()=>{
 	assert.equal(button.text(), "testButton");	
 });
 
-test("Component uses header-, body- and buttons-slots", ()=>{
+test("Component uses header-, body- and footer-slots", ()=>{
 	const testComponent = {
 		name: "te-st",
 		template: `
 			<modal-dialog-base>
 				<div id="one" slot="header">oneContent</div>
 				<div id="two" slot="body">twoContent</div>
-				<div id="three" slot="buttons">threeContent</div>
+				<div id="three" slot="footer">threeContent</div>
 			</modal-dialog-base>`,
 		components: {"modal-dialog-base": sample}
 	};
@@ -43,9 +43,9 @@ test("Component uses header-, body- and buttons-slots", ()=>{
 	
 	const header = mounted.find("#one").text();
 	const body = mounted.find("#two").text();
-	const buttons = mounted.find("#three").text();
+	const footer = mounted.find("#three").text();
 	
 	assert.equal(header, "oneContent");
 	assert.equal(body, "twoContent");
-	assert.equal(buttons, "threeContent");
+	assert.equal(footer, "threeContent");
 });

@@ -16,7 +16,19 @@ const store = {
 	},
 	
 	mutations: {			
-		set: mutations.setProps
+		set: mutations.setProps,
+		
+		addDialogs(state, dialogs) {
+			for(let i=0, ii=dialogs.length; i<ii; i++) {
+				const dialog = dialogs[i];
+				
+				if(dialog.name in state.dialogComponentMap) {
+					throw new Error("Failed to install dialog to store: duplicate name detected: "+dialog.name);
+				}
+				
+				state.dialogComponentMap[dialog.name] = dialog.component;
+			}			
+		}
 	},	
 	
 	actions: {
@@ -37,22 +49,7 @@ const store = {
 		},
 		
 		installUserDialogs(store, dialogs) {
-			for(let i=0, ii=dialogs.length; i<ii; i++) {
-				const dialog = dialogs[i];
-				
-				if( !("name" in dialog && "component" in dialog) ) {
-					throw new Error("Failed to install dialog to store: dialogs must have 'name' (name of dialog) and 'component' (name of component) property.");
-				}
-				
-				if(dialog.name in store.state.dialogComponentMap) {
-					throw new Error("Failed to install dialog to store: duplicate name detected: "+dialog.name);
-				}
-				
-				const data = {};
-				data[dialog.name] = dialog.component;
-				
-				store.commit("set", {dialogComponentMap: data});
-			}
+			store.commit("addDialogs", dialogs);
 		}
 	}
 };
