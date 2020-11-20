@@ -141,11 +141,11 @@ export default {
   props: ["parameters", "close"],
   //<base-modal-dialog> is available on all custom dialogs
   template: `
-  <base-modal-dialog title="Custom dialog" :buttons="{'DoSth', doSth}">
+  <base-modal-dialog title="Custom dialog" :buttons="{'DoSth': doSth}">
     <div slot="header">custon header</div>
     <div slot="body">custon body</div>
     <div slot="footer">custon footer</div>
-  </<base-modal-dialog>
+  </base-modal-dialog>
   `,
   methods: {
     doSth() {
